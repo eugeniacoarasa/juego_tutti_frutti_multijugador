@@ -12,6 +12,7 @@ const rooms = {};
 io.on('connection', (socket) => {
     console.log('¡Un nuevo jugador se ha conectado con ID:', socket.id);
 
+    // Evento: Unirse a sala
     socket.on('unirse_sala', (roomCode) => {
         socket.join(roomCode);
         if (!rooms[roomCode]) {
@@ -28,13 +29,12 @@ io.on('connection', (socket) => {
         }
         io.to(roomCode).emit('actualizar_sala', rooms[roomCode]);
     });
-   
-    // Sincronizar las correcciones de palabras en tiempo real entre los jugadores de la sala
+
+    // Sincronizar las correcciones de palabras
     socket.on('cambiar_estado_palabra', (data) => {
         const { roomCode, targetPlayerId, index, status, points, textBadge } = data;
         console.log(`[Servidor] Cambio recibido en sala ${roomCode} para el jugador ${targetPlayerId}`);
         if (rooms[roomCode]) {
-            // Usamos io.to para asegurar que llegue a todos los navegadores de la sala
             io.to(roomCode).emit('sincronizar_estado_palabra', {
                 targetPlayerId,
                 index,
@@ -45,11 +45,12 @@ io.on('connection', (socket) => {
         }
     });
 
-    // --- NUEVO: Escuchar cuando un jugador abandona manualmente la sala ---
+    // Abandonar sala
     socket.on('abandonar_sala', ({ roomCode }) => {
         removerJugadorDeSala(socket, roomCode);
     });
 
+    // Enviar respuestas
     socket.on('enviar_respuestas', ({ roomCode, respuestas }) => {
         if (!rooms[roomCode]) return;
         
@@ -61,6 +62,7 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Cambiar dificultad
     socket.on('cambiar_dificultad', ({ roomCode, difficulty }) => {
         if (rooms[roomCode] && rooms[roomCode].leaderId === socket.id) {
             rooms[roomCode].difficulty = difficulty;
@@ -68,6 +70,7 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Girar ruleta
     socket.on('girar_ruleta_sala', ({ roomCode }) => {
         if (rooms[roomCode] && rooms[roomCode].leaderId === socket.id) {
             const diff = rooms[roomCode].difficulty;
@@ -82,15 +85,27 @@ io.on('connection', (socket) => {
         }
     });
 
+    // Basta para todos
     socket.on('basta_para_todos', ({ roomCode }) => {
         io.to(roomCode).emit('juego_terminado_sala');
     });
 
+    // Chat
     socket.on('enviar_mensaje_chat', ({ roomCode, message, sender }) => {
         io.to(roomCode).emit('recibir_mensaje_chat', { message, sender });
     });
 
-    // --- ACTUALIZADO: Desconexión imprevista usa la misma lógica ---
+    // Sugerir palabra (MOVIDO ADENTRO PARA FUNCIONAR)
+    socket.on('sugerir_palabra', (data) => {
+        console.log(`========================================`);
+        console.log(`💡 ¡NUEVA SUGERENCIA DE PALABRA RECIBIDA!`);
+        console.log(`📂 Categoría: ${data.categoria}`);
+        console.log(`🔠 Letra: ${data.letra}`);
+        console.log(`✍️ Palabra: ${data.palabra}`);
+        console.log(`========================================`);
+    });
+
+    // Desconexión
     socket.on('disconnect', () => {
         console.log('Usuario desconectado:', socket.id);
         for (const roomCode in rooms) {
@@ -100,23 +115,14 @@ io.on('connection', (socket) => {
         }
     });
 });
-    socket.on('sugerir_palabra', (data) => {
-            console.log(`========================================`);
-            console.log(`💡 ¡NUEVA SUGERENCIA DE PALABRA RECIBIDA!`);
-            console.log(`📂 Categoría: ${data.categoria}`);
-            console.log(`🔠 Letra: ${data.letra}`);
-            console.log(`✍️ Palabra: ${data.palabra}`);
-            console.log(`========================================`);
-        });
 
-// Función auxiliar para quitar al jugador, reasignar líder si es necesario y actualizar la sala
+// Función auxiliar para quitar al jugador
 function removerJugadorDeSala(socket, roomCode) {
     socket.leave(roomCode);
     if (!rooms[roomCode]) return;
 
     rooms[roomCode].players = rooms[roomCode].players.filter(id => id !== socket.id);
     
-    // Si tenía respuestas guardadas, las removemos también
     if (rooms[roomCode].answers && rooms[roomCode].answers[socket.id]) {
         delete rooms[roomCode].answers[socket.id];
     }
@@ -124,7 +130,6 @@ function removerJugadorDeSala(socket, roomCode) {
     if (rooms[roomCode].players.length === 0) {
         delete rooms[roomCode];
     } else {
-        // Si el que se fue era el líder, le pasamos el liderazgo al siguiente
         if (rooms[roomCode].leaderId === socket.id) {
             rooms[roomCode].leaderId = rooms[roomCode].players[0];
             io.to(rooms[roomCode].leaderId).emit('asignar_lider', true);
@@ -136,4 +141,3 @@ function removerJugadorDeSala(socket, roomCode) {
 server.listen(3000, () => {
     console.log('¡Servidor activo en http://localhost:3000 !');
 });
-
