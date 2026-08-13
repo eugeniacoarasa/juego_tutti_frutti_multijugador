@@ -1,0 +1,21 @@
+{
+  "name": "Tutti Frutti Neón",
+  "short_name": "Tutti Frutti",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#A2D2FF",
+  "theme_color": "#ff77ff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "images/icono_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icono_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,679 @@
+/* ==========================================
+   1. CONFIGURACIÓN GLOBAL Y RESET
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #A2D2FF;
+    background-size: 400% 400%;
+    font-family: 'Nunito', sans-serif;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    color: #2b2d42;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ==========================================
+   2. CONTENEDOR PRINCIPAL (MÓVIL Y PC AMPLIADO)
+   ========================================== */
+.app-container {
+    width: 94vw;
+    height: 94vh;
+    max-width: 100%;
+    max-height: 100%;
+    background: linear-gradient(135deg, #CDB4DB, #CDB4DB, #FFAFCC, #BDE0FE, #A2D2FF);
+    background-size: 100% 100%;
+    animation: gradientBG 15s ease infinite;
+    backdrop-filter: blur(14px);
+    border-radius: 24px;
+    border: 3px solid #ff77ff;
+    box-shadow: 0 0 25px rgba(255, 119, 255, 0.5), inset 0 0 15px rgba(125, 249, 255, 0.3);
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+    .app-container {
+        width: 96vw;
+        height: 95vh;
+        max-width: 1400px;
+        max-height: 900px;
+        background: linear-gradient(135deg, #CDB4DB, #FFC8DD, #FFAFCC, #BDE0FE, #A2D2FF);
+        backdrop-filter: blur(14px);
+        animation: gradientBG 15s ease infinite;
+        border-radius: 32px;
+        border: 4px solid #ff77ff;
+        box-shadow: 0 0 45px rgba(255, 119, 255, 0.65), inset 0 0 25px rgba(125, 249, 255, 0.4);
+        padding: 35px 50px;
+    }
+}
+
+/* ==========================================
+   3. TIPOGRAFÍA
+   ========================================== */
+h1, h2, h3 {
+    font-family: 'Fredoka', sans-serif;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #ff3399;
+    text-shadow: 0 0 12px rgba(255, 51, 153, 0.4);
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 2.2rem;
+    color: #7209b7;
+    margin-bottom: 6px;
+}
+
+p {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #4a4e69;
+    margin-bottom: 12px;
+}
+
+/* ==========================================
+   4. BARRAS SUPERIORES Y BOTONES DE UTILIDAD
+   ========================================== */
+.top-utilities {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    width: 100%;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.screen-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+}
+
+.util-group {
+    display: flex;
+    gap: 10px;
+}
+
+.util-btn {
+    background: #fff;
+    border: 2px solid #b5179e;
+    color: #b5179e;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 0 8px rgba(181, 23, 158, 0.3);
+    transition: all 0.2s ease;
+}
+
+.util-btn:hover {
+    background: #b5179e;
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 14px rgba(181, 23, 158, 0.8);
+}
+
+.home-btn {
+    border-color: #f72585;
+    color: #f72585;
+}
+
+.home-btn:hover {
+    background: #f72585;
+    color: #fff;
+}
+
+/* ==========================================
+   5. PANTALLA DE BIENVENIDA (FONDO Y TÍTULO)
+   ========================================== */
+#screen-welcome {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/fondo_inicio.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 21px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#screen-welcome.active {
+    display: flex;
+}
+
+@media (min-width: 768px) {
+    #screen-welcome {
+        border-radius: 28px;
+        padding: 35px 50px;
+    }
+}
+
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding-top: 15px;
+}
+
+/* Imagen del título grande y con colores sólidos (sin transparencias) */
+.game-title {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+/* Contenedor de botones bajado para dar espacio al título */
+.welcome-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.welcome-icon {
+    font-size: 5rem;
+    color: #f72585;
+    filter: drop-shadow(0 0 14px #f72585);
+    margin: 20px 0;
+}
+
+/* ==========================================
+   6. FIRMA DE AUTORÍA
+   ========================================== */
+.author-signature {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a4e69;
+    text-align: center;
+    padding: 8px 0;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.author-signature .heart-icon {
+    color: #ff3366;
+    display: inline-block;
+    animation: heartbeat 1.2s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+}
+
+.author-signature a {
+    color: #7209b7;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.author-signature a:hover {
+    color: #ff3399;
+    text-decoration: underline;
+}
+
+/* ==========================================
+   7. BOTONES NEÓN
+   ========================================== */
+.neon-btn {
+    background: linear-gradient(135deg, #ff77ff, #77ffff);
+    border: 2px solid #fff;
+    color: #1e293b;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 15px 35px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 18px rgba(255, 119, 255, 0.8);
+    transition: all 0.3s ease;
+    outline: none;
+    width: 100%;
+    max-width: 480px;
+    margin: 14px auto;
+    display: block;
+    flex-shrink: 0;
+}
+
+.neon-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 28px rgba(119, 255, 255, 1), 0 0 12px rgba(255, 119, 255, 1);
+}
+
+.small-btn {
+    width: auto;
+    max-width: none;
+    margin-top: 0;
+    padding: 10px 24px;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+
+.secondary-btn {
+    background: linear-gradient(135deg, #4cc9f0, #4361ee);
+    color: #fff;
+    box-shadow: 0 0 18px rgba(76, 201, 240, 0.6);
+}
+
+/* ==========================================
+   8. CONTROL DE PANTALLAS
+   ========================================== */
+.screen {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    text-align: center;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.screen-inner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================
+   9. RULETA ESTILO FERIA Y SELECTOR DE NIVEL
+   ========================================== */
+.wheel-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 18px auto;
+}
+
+@media (min-width: 768px) {
+    .wheel-container {
+        width: 370px;
+        height: 370px;
+    }
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 28px solid #ff3366;
+    z-index: 20;
+    filter: drop-shadow(0 0 8px #ff3366);
+}
+
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    box-shadow: 0 0 28px rgba(119, 249, 255, 0.8), inset 0 0 20px rgba(255, 119, 255, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 4s cubic-bezier(0.15, 0.9, 0.2, 1);
+}
+
+.difficulty-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.diff-btn {
+    background: #fff;
+    border: 2px solid #7209b7;
+    color: #7209b7;
+    font-family: 'Fredoka', sans-serif;
+    padding: 6px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 0 6px rgba(114, 9, 183, 0.2);
+}
+
+.diff-btn.active, .diff-btn:hover {
+    background: #7209b7;
+    color: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(114, 9, 183, 0.6);
+}
+
+.wheel-letter-spot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
+}
+
+@media (min-width: 768px) {
+    .wheel-letter-spot {
+        font-size: 1.7rem;
+    }
+}
+
+/* ==========================================
+   10. JUEGO Y CATEGORÍAS (2 COLUMNAS AMPLIAS)
+   ========================================== */
+.game-main-area {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+    text-align: left;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.game-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.highlight-letter {
+    color: #f72585;
+    font-size: 2.6rem;
+}
+
+.timer-text {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.4rem;
+    color: #f72585;
+}
+
+.timer-bar-container {
+    width: 100%;
+    background: #e2e8f0;
+    border-radius: 12px;
+    height: 13px;
+    overflow: hidden;
+    margin: 10px 0 16px 0;
+    border: 1px solid #cbd5e1;
+}
+
+.timer-bar {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #4cc9f0, #f72585);
+    transition: width 1s linear;
+}
+
+.categories-scroll {
+    width: 100%;
+    max-height: 56vh;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 12px;
+}
+
+@media (min-width: 768px) and (orientation: landscape) {
+    .categories-scroll {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 40px;
+        max-height: 60vh;
+        overflow-y: visible;
+    }
+    .category-group:last-child:nth-child(odd) {
+        grid-column: span 2;
+        max-width: 60%;
+        margin: 0 auto;
+    }
+}
+
+.category-group {
+    margin-bottom: 15px;
+}
+
+.category-group label {
+    display: block;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.2rem;
+    color: #3f37c9;
+    margin-bottom: 6px;
+}
+
+.category-group input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 2px solid #b5179e;
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    outline: none;
+    box-shadow: 0 0 12px rgba(181, 23, 158, 0.2);
+    transition: box-shadow 0.2s;
+}
+
+.category-group input:focus {
+    box-shadow: 0 0 18px rgba(181, 23, 158, 0.6);
+    border-color: #7209b7;
+}
+
+/* ==========================================
+   11. RESULTADOS Y PUNTUACIÓN
+   ========================================== */
+.total-score {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2rem;
+    color: #7209b7;
+    margin: 12px 0;
+}
+
+.results-summary {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 18px auto;
+    background: #f8f9fa;
+    border-radius: 18px;
+    padding: 18px 24px;
+    border: 2px solid #4cc9f0;
+    text-align: left;
+    max-height: 42vh;
+    overflow-y: auto;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #cbd5e1;
+    font-size: 1.12rem;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.badge.correct { background: #d4edda; color: #155724; }
+.badge.rare { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+.badge.incorrect { background: #f8d7da; color: #721c24; }
+.badge.repetida { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+.score-prompt {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    font-family: 'nunito';
+    font-weight: bolder;
+}
+
+.initials-box {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.initials-box input {
+    width: 110px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-family: 'Fredoka', sans-serif;
+    border-radius: 14px;
+    border: 2px solid #f72585;
+    outline: none;
+    padding: 8px;
+}
+
+/* ==========================================
+   12. VENTANAS MODALES PERSONALIZADAS
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+.modal-card {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 35px;
+    border-radius: 26px;
+    border: 3px solid #ff77ff;
+    box-shadow: 0 0 35px rgba(255, 119, 255, 0.8);
+    text-align: left;
+    animation: scaleUp 0.3s ease-in-out;
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-card h3 {
+    color: #7209b7;
+    font-size: 1.9rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.help-rules-list {
+    list-style: none;
+    padding: 0;
+}
+
+.help-rules-list li {
+    font-size: 1.1rem;
+    color: #4a4e69;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.custom-modal-card {
+    text-align: center;
+}
+
+.custom-modal-card p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #2b2d42;
+}
+
+.custom-modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+#lobbyStatus {
+    color: #7209b7; /* Cambia este código por el color que quieras, ej: #00ffcc (aguamarina) o #ff00ff (fucsia) */
+    font-size: 1.1rem;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
